@@ -1,0 +1,35 @@
+{
+  "name": "passport-keystone",
+  "version": "0.2.0",
+  "description": "OpenStack Keystone authentication strategy for Passport and Node.js",
+  "main": "./lib/passport-keystone",
+  "scripts": {
+    "test": "NODE_PATH=lib node_modules/.bin/vows test/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/eddywashere/passport-keystone.git"
+  },
+  "keywords": [
+    "passport",
+    "openstack",
+    "keystone",
+    "identity",
+    "authentication",
+    "auth"
+  ],
+  "author": {
+    "name": "Eddy Hernandez",
+    "email": "edward.d.hernandez@gmail.com",
+    "url": "http://eddywashere.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eddywashere/passport-keystone/issues"
+  },
+  "dependencies": {
+    "passport-strategy": "~1.0.0",
+    "pkginfo": "~0.3.0",
+    "pkgcloud": "~0.9.0"
+  }
+}
