@@ -16,9 +16,7 @@ credentials and calls `done` providing a user.
 
     passport.use(new KeystoneStrategy({
        region: your.region,
-       url: your.authUrl,
-       usernameField: 'username',
-       passwordField: 'password'
+       authUrl: your.authUrl
       },
       function(user, done) {
         return done(null, user);
