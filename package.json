@@ -1,10 +1,9 @@
 {
   "name": "passport-keystone",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OpenStack Keystone authentication strategy for Passport and Node.js",
   "main": "./lib/passport-keystone",
   "scripts": {
-    "test": "NODE_PATH=lib node_modules/.bin/vows test/*-test.js"
   },
   "repository": {
     "type": "git",
