@@ -1,0 +1,27 @@
+<% layout('layout') -%>
+<% if (!user) { %>
+	<h2>Welcome! Please log in.</h2>
+<% } else { %>
+	<h2>Hello, <%= user.username %>.</h2>
+  <p>Token: <%= user.token %><p>
+  <h3>Example Rackspace Endpoints</h3>
+  <p>Proxy format (<code>/proxy/:serviceName,:serviceEndpointRegion/</code>) requires a service name and optionally requires a region name if it exists.</p>
+  <ul>
+    <li> Cloud Monitoring (no region required)
+      <ul>
+        <li><a href="/proxy/cloudMonitoring/entities">Entities</a></li>
+      </ul>
+    </li>
+    <li>Cloud Servers (region required)
+      <ul>
+        <li><a href="/proxy/cloudServersOpenStack,DFW/servers">DFW</a></li>
+        <li><a href="/proxy/cloudServersOpenStack,ORD/servers">ORD</a></li>
+        <li><a href="/proxy/cloudServersOpenStack,IAD/servers">IAD</a></li>
+      </ul>
+    </li>
+  </ul>
+  <p>Other service catalog entries</p>
+  <code><pre>
+    <%- JSON.stringify(user.serviceCatalog, null, 4) %>
+  </pre></code>
+<% } %>

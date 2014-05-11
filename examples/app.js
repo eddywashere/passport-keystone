@@ -1,7 +1,8 @@
 var express = require('express'),
 passport = require('passport'),
 flash = require('connect-flash'),
-KeystoneStrategy = require('../lib/passport-keystone').Strategy;
+KeystoneStrategy = require('../lib/passport-keystone').Strategy,
+proxyKeystone = require('proxy-keystone');
 
 
 // Passport session setup.
@@ -23,31 +24,29 @@ passport.deserializeUser(function(obj, done) {
 //   credentials (in this case, a username and password), and invoke a callback
 //   with a user object.  In the real world, this would query a database;
 //   however, in this example we are using a baked-in set of users.
-passport.use(new KeystoneStrategy(
-  {
+passport.use(new KeystoneStrategy({
     authUrl: 'https://identity.api.rackspacecloud.com',
     region: 'ord',
-    passReqToCallback : true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
-  },
-  function(req, identity, done) {
-    if (!req.user) {
-      var user = {};
+    passReqToCallback : true // allows us to interact with req object
+}, function(req, identity, done) {
+  if (!req.user) {
+    var user = {
+        id: identity.user.id,
+        token: identity.token.id,
+        username: identity.user.name,
+        serviceCatalog: identity.raw.access.serviceCatalog
+    };
 
-      user.id    = identity.token.tenant.id +'-'+ identity.user.name;
-      user.username  = identity.user.name;
-      user.tenant  = identity.token.tenant.id;
-      user.token = identity.token.id;
-      req.session.cookie.expires = Date.parse(identity.token.expires) - Date.now();
+    // Set session expiration to token expiration
+    req.session.cookie.expires = Date.parse(identity.token.expires) - Date.now();
+
+    done(null, user);
+  } else {
+      // user already exists
+      var user = req.user; // pull the user out of the session
       return done(null, user);
-    } else {
-      // user already exists and is logged in, we have to link accounts
-      var user            = req.user; // pull the user out of the session
-      user.token = identity.token.id;
-      req.session.cookie.expires = Date.parse(identity.token.expires) - Date.now();
-      return done(null, user);
-    }
-  })
-);
+  }
+}));
 
 var app = express();
 
@@ -75,6 +74,10 @@ app.get('/', function(req, res){
   res.render('index', { user: req.user });
 });
 
+app.get('/rackspace', function(req, res){
+  res.render('rackspace', { user: req.user });
+});
+
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account', { user: req.user });
 });
@@ -96,29 +99,12 @@ app.post('/login',
     res.redirect('/');
   });
 
-// POST /login
-//   This is an alternative implementation that uses a custom callback to
-//   acheive the same functionality.
-/*
-app.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err) }
-    if (!user) {
-      req.flash('error', info.message);
-      return res.redirect('/login')
-    }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.redirect('/users/' + user.username);
-    });
-  })(req, res, next);
-});
-*/
-
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
+
+app.all('/proxy/*', proxyKeystone());
 
 app.listen(3000, function() {
   console.log('Express server listening on port 3000');
