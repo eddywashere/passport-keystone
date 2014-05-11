@@ -2,22 +2,30 @@
 
 OpenStack Keystone authentication strategy for [Passport](http://passportjs.org/) and Node.js
 
-## Install
+## Installation
 
-    $ npm install passport-keystone
+```sh
+npm install passport-keystone
+```
 
-## Example Usage
+## [Example](https://passport-keystone-proxy.herokuapp.com/)
+
+Check out the [live demo](https://passport-keystone-proxy.herokuapp.com/), source code [here](https://github.com/eddywashere/passport-keystone/tree/master/examples), to see an express app configured for authentication with the [Rackspace Cloud Identity Service](http://docs.rackspace.com/auth/api/v2.0/auth-client-devguide/content/QuickStart-000.html), an implementation of OpenStack Keystone Service. Also included in the example is the [Proxy-Keystone](https://github.com/eddywashere/proxy-keystone) middleware, a simple proxy for keystone service catalog endpoints.
+
+## Documentation
 
 #### Authentication
 
 The keystone authentication strategy authenticates users using a username and
-password.  The strategy requires a `verify` callback, which accepts these
+password from the POST body.  The strategy requires a `verify` callback, which accepts these
 credentials and calls `done` providing a user that is attached to `req.user`.
 
 ```js
 passport.use(new KeystoneStrategy({
-   region: your.region,
-   authUrl: your.authUrl
+   region: your.region, // required
+   authUrl: your.authUrl, // required
+   usernameField: 'username', // optional
+   passwordField: 'password' // optional
   },
   function(user, done) {
     var user = {
@@ -37,8 +45,10 @@ The following example uses `passReqToCallback` to send the `req` object to next 
 
 ```js
 passport.use(new KeystoneStrategy({
-    authUrl: 'https://identity.api.rackspacecloud.com',
-    region: 'ord',
+    region: your.region, // required
+    authUrl: your.authUrl, // required
+    usernameField: 'username', // optional
+    passwordField: 'password' // optional
     passReqToCallback : true // allows us to interact with req object
 }, function(req, identity, done) {
   if (!req.user) {
@@ -73,6 +83,24 @@ app.post('/login',
     res.redirect('/');
   }
 );
+```
+
+Example form markup
+
+```html
+<form action="/login" method="post">
+  <label>Username:</label>
+  <input type="text" name="username"/><br/>
+  <label>Password:</label>
+  <input type="password" name="password"/>
+  <input type="submit" value="Submit"/>
+</form>
+```
+
+Example request via curl
+
+```sh
+curl -v -d "username=bob&password=secret" http://127.0.0.1:3000/login
 ```
 
 Checkout [Passportjs.org](http://passportjs.org/guide/authenticate/) for more authentication examples.

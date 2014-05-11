@@ -1,7 +1,7 @@
 var express = require('express'),
 passport = require('passport'),
 flash = require('connect-flash'),
-KeystoneStrategy = require('../lib/passport-keystone').Strategy,
+KeystoneStrategy = require('passport-keystone').Strategy,
 proxyKeystone = require('proxy-keystone');
 
 
@@ -106,8 +106,10 @@ app.get('/logout', function(req, res){
 
 app.all('/proxy/*', proxyKeystone());
 
-app.listen(3000, function() {
-  console.log('Express server listening on port 3000');
+var port = Number(process.env.PORT || 3000);
+
+app.listen(port, function() {
+  console.log('Express server listening on port ' + port);
 });
 
 
