@@ -1,6 +1,6 @@
 {
   "name": "passport-keystone",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "OpenStack Keystone authentication strategy for Passport and Node.js",
   "main": "./lib/passport-keystone",
   "scripts": {
