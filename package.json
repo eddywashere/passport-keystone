@@ -12,10 +12,14 @@
   "keywords": [
     "passport",
     "openstack",
+    "rackspace",
     "keystone",
     "identity",
     "authentication",
-    "auth"
+    "auth",
+    "express",
+    "middleware",
+    "connect"
   ],
   "author": {
     "name": "Eddy Hernandez",
