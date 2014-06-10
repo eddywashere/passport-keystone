@@ -14,6 +14,6 @@
     "ejs-locals": ">= 0.0.0",
     "passport": ">= 0.0.0",
     "passport-keystone": ">= 0.0.0",
-    "proxy-keystone": "*"
+    "proxy-keystone": ">= 2.0.0"
   }
 }

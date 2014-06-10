@@ -2,7 +2,10 @@ var express = require('express'),
 passport = require('passport'),
 flash = require('connect-flash'),
 KeystoneStrategy = require('passport-keystone').Strategy,
-proxyKeystone = require('proxy-keystone');
+ProxyKeystone = require('proxy-keystone'),
+proxyKeystone = new ProxyKeystone({
+  userAgent: 'Custom Openstack Dashboard'
+});
 
 
 // Passport session setup.
@@ -97,14 +100,15 @@ app.post('/login',
   passport.authenticate('keystone', { failureRedirect: '/login', failureFlash: true }),
   function(req, res) {
     res.redirect('/');
-  });
+  }
+);
 
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
 
-app.all('/proxy/*', proxyKeystone());
+app.all('/proxy/*', proxyKeystone.middleware);
 
 var port = Number(process.env.PORT || 3000);
 
