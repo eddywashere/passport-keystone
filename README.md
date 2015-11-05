@@ -22,10 +22,11 @@ credentials and calls `done` providing a user that is attached to `req.user`.
 
 ```js
 passport.use(new KeystoneStrategy({
-   region: your.region, // required
-   authUrl: your.authUrl, // required
-   usernameField: 'username', // optional
-   passwordField: 'password' // optional
+    authUrl: your.authUrl, // required
+    usernameField: 'username', // optional
+    passwordField: 'password' // optional
+    region: your.region, // optional
+    tenantId: your.tenantId // optional
   },
   function(user, done) {
     var user = {
@@ -45,10 +46,11 @@ The following example uses `passReqToCallback` to send the `req` object to next 
 
 ```js
 passport.use(new KeystoneStrategy({
-    region: your.region, // required
     authUrl: your.authUrl, // required
     usernameField: 'username', // optional
     passwordField: 'password' // optional
+    region: your.region, // optional
+    tenantId: your.tenantId // optional
     passReqToCallback : true // allows us to interact with req object
 }, function(req, identity, done) {
   if (!req.user) {
